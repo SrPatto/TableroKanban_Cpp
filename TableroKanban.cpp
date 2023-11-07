@@ -2,22 +2,37 @@
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
+using namespace std;
+
+void gotoxy(int, int);
+void tablero();
+void menu_principal();
+
+HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+
+int main()
+{
+
+    tablero();
+
+    menu_principal();
+
+    system("pause>null");
+    return 0;
+}
 
 void gotoxy(int x, int y)
 {
-    HANDLE hCon;
     COORD dwPos;
-
     dwPos.X = x;
     dwPos.Y = y;
-    hCon = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleCursorPosition(hCon, dwPos);
 }
 
-void pintar()
+void tablero()
 {
     // lineas horizontales
-    for (int i = 2; i < 78; i++)
+    for (int i = 32; i < 108; i++)
     {
         gotoxy(i, 3);
         printf("%c", 205);
@@ -29,46 +44,62 @@ void pintar()
     // lineas verticales
     for (int i = 4; i < 23; i++)
     {
-        gotoxy(2, i);
+        gotoxy(32, i);
         printf("%c", 186);
-        gotoxy(27, i);
+        gotoxy(57, i);
         printf("%c", 186);
-        gotoxy(52, i);
+        gotoxy(82, i);
         printf("%c", 186);
-        gotoxy(77, i);
+        gotoxy(107, i);
         printf("%c", 186);
     }
     // vertices
-    gotoxy(2, 3);
+    gotoxy(32, 3);
     printf("%c", 201);
-    gotoxy(2, 23);
+    gotoxy(32, 23);
     printf("%c", 200);
-    gotoxy(77, 3);
+    gotoxy(107, 3);
     printf("%c", 187);
-    gotoxy(77, 23);
+    gotoxy(107, 23);
     printf("%c", 188);
-    gotoxy(27, 3);
+    gotoxy(57, 3);
     printf("%c", 203);
-    gotoxy(52, 3);
+    gotoxy(82, 3);
     printf("%c", 203);
-    gotoxy(27, 23);
+    gotoxy(57, 23);
     printf("%c", 202);
-    gotoxy(52, 23);
+    gotoxy(82, 23);
     printf("%c", 202);
-    gotoxy(2, 8);
+    gotoxy(32, 8);
     printf("%c", 204);
-    gotoxy(77, 8);
+    gotoxy(107, 8);
     printf("%c", 185);
-    gotoxy(27, 8);
+    gotoxy(57, 8);
     printf("%c", 206);
-    gotoxy(52, 8);
+    gotoxy(82, 8);
     printf("%c", 206);
+
+    // Titulos
+    gotoxy(34, 5);
+    SetConsoleTextAttribute(hCon, 4);
+    cout << "\tPENDIENTE";
+    gotoxy(59, 5);
+    SetConsoleTextAttribute(hCon, 1);
+    cout << "\tEN CURSO";
+    gotoxy(84, 5);
+    SetConsoleTextAttribute(hCon, 2);
+    cout << "\tCOMPLETADO";
 }
 
-int main()
+void menu_principal()
 {
-    pintar();
-    gotoxy(1, 24);
-    system("pause>null");
-    return 0;
+    // system("cls");
+
+    gotoxy(2, 3);
+    SetConsoleTextAttribute(hCon, 7);
+    cout << "\t Bienvenido\n\n";
+    cout << "1- Crear nueva tarea\n";
+    cout << "2- Mover tarea\n";
+    cout << "3- Eliminar tarea\n";
+    cout << "4- Salir";
 }
