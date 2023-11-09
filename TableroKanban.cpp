@@ -7,6 +7,7 @@ using namespace std;
 void gotoxy(int, int);
 void tablero();
 void menu_principal();
+void mostrarColas();
 
 HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -16,6 +17,7 @@ int main()
     tablero();
 
     menu_principal();
+    mostrarColas();
 
     system("pause>null");
     return 0;
@@ -102,4 +104,20 @@ void menu_principal()
     cout << "2- Mover tarea\n";
     cout << "3- Eliminar tarea\n";
     cout << "4- Salir";
+}
+
+void mostrarColas()
+{
+    string test = "Lorem ipsum dolor sit amet consectetur adipiscing elit tristique sollicitudin, imperdiet consequat integer sociosqu ullamcorper senectus feugiat magna, vel tellus fringilla eros augue pulvinar fusce proin. Morbi cursus sem ante at justo eu integer quisque sagittis nam, pulvinar himenaeos aenean erat habitasse tortor turpis nisi. Justo viverra ridiculus neque luctus diam commodo quis, augue sodales ornare curabitur nostra tortor facilisi, etiam pharetra magna vivamus porta eros.";
+    int k = 0;
+
+    for (int y = 10; y < 20; y++)
+    {
+        for (int x = 34; x < 56; x++)
+        {
+            gotoxy(x, y);
+            cout << test[k];
+            k++;
+        }
+    }
 }
