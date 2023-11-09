@@ -7,17 +7,23 @@ using namespace std;
 void gotoxy(int, int);
 void tablero();
 void menu_principal();
-void mostrarColas();
+void mostrarColas(string, string);
 
 HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+int k = 0, y = 10, x = 34;
 
 int main()
 {
+    string titulo1 = "tarea1 ";
+    string describcion1 = "Lorem ipsum dolor sit amet consectetur adipiscing elit tristique sollicitudin ";
+    string titulo2 = "tarea2 ";
+    string describcion2 = "Lorem ipsum dolor sit amet consectetur adipiscing elit tristique sollicitudin ";
 
     tablero();
-
     menu_principal();
-    mostrarColas();
+
+    mostrarColas(titulo1, describcion1);
+    mostrarColas(titulo2, describcion2);
 
     system("pause>null");
     return 0;
@@ -106,18 +112,43 @@ void menu_principal()
     cout << "4- Salir";
 }
 
-void mostrarColas()
+void mostrarColas(string titulo, string describcion)
 {
-    string test = "Lorem ipsum dolor sit amet consectetur adipiscing elit tristique sollicitudin, imperdiet consequat integer sociosqu ullamcorper senectus feugiat magna, vel tellus fringilla eros augue pulvinar fusce proin. Morbi cursus sem ante at justo eu integer quisque sagittis nam, pulvinar himenaeos aenean erat habitasse tortor turpis nisi. Justo viverra ridiculus neque luctus diam commodo quis, augue sodales ornare curabitur nostra tortor facilisi, etiam pharetra magna vivamus porta eros.";
-    int k = 0;
+    int n_Titulo = 0, n_Describcion = 0;
+    int sizeTitulo = titulo.size();
+    int sizeDescribcion = describcion.size();
 
-    for (int y = 10; y < 20; y++)
+    // Imprime el titulo de la tarea
+    while (y < 20 && n_Titulo < sizeTitulo)
     {
-        for (int x = 34; x < 56; x++)
+        while (x < 56 && n_Titulo < sizeTitulo)
         {
             gotoxy(x, y);
-            cout << test[k];
-            k++;
+            cout << titulo[n_Titulo];
+            n_Titulo++;
+            x++;
         }
+        x = 34;
+        y++;
     }
+    // Imprime la describcion de la tarea
+    while (y < 22 && n_Describcion < sizeDescribcion)
+    {
+        while (x < 56 && n_Describcion < sizeDescribcion)
+        {
+            gotoxy(x, y);
+            cout << describcion[n_Describcion];
+            n_Describcion++;
+            x++;
+        }
+        x = 34;
+        y++;
+    }
+    // Divide tareas
+    for (int i = 34; i < 56; i++)
+    {
+        gotoxy(i, y);
+        printf("%c", 196);
+    }
+    y++;
 }
