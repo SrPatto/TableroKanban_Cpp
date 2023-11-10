@@ -2,11 +2,17 @@
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
+
+#define TECLA_ARRIBA 72
+#define TECLA_ABAJO 80
+#define ENTER 13
 using namespace std;
 
 void gotoxy(int, int);
 void tablero();
+int menu(const char *, const char *opciones[], int);
 void menu_principal();
+
 void mostrarColas(string, string);
 
 HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -20,10 +26,10 @@ int main()
     string describcion2 = "Lorem ipsum dolor sit amet consectetur adipiscing elit tristique sollicitudin ";
 
     tablero();
-    menu_principal();
-
+    SetConsoleTextAttribute(hCon, 7);
     mostrarColas(titulo1, describcion1);
     mostrarColas(titulo2, describcion2);
+    menu_principal();
 
     system("pause>null");
     return 0;
@@ -101,15 +107,108 @@ void tablero()
 
 void menu_principal()
 {
-    // system("cls");
+    bool repite = true;
+    int opcion;
 
-    gotoxy(2, 3);
-    SetConsoleTextAttribute(hCon, 7);
-    cout << "\t Bienvenido\n\n";
-    cout << "1- Crear nueva tarea\n";
-    cout << "2- Mover tarea\n";
-    cout << "3- Eliminar tarea\n";
-    cout << "4- Salir";
+    // Titulo y las opciones del menu
+    const char *titulo = "\tBienvenido";
+    const char *opciones[] = {"Crear nueva tarea", "Mover tarea", "Eliminar tarea", "Salir"};
+    int n = 4;
+
+    do
+    {
+        opcion = menu(titulo, opciones, n);
+
+        switch (opcion)
+        {
+        case 1:
+            gotoxy(2, 16);
+            cout << "hello mom";
+            break;
+        case 2:
+            gotoxy(2, 16);
+            cout << "hello dad";
+            break;
+        case 3:
+            gotoxy(2, 16);
+            cout << "hello world";
+            break;
+        case 4:
+            system("cls");
+            gotoxy(2, 2);
+            cout << "Adios";
+            repite = false;
+            break;
+
+        default:
+            break;
+        }
+
+    } while (repite);
+}
+
+int menu(const char *titulo, const char *opciones[], int n)
+{
+    int opcionSeleccionada = 1;
+    int tecla;
+    bool repite = true;
+
+    do
+    {
+        gotoxy(2, 4 + opcionSeleccionada);
+        cout << "==>";
+        // Imprime titulo
+        gotoxy(2, 3);
+        cout << titulo;
+        // Imprime opciones
+        for (int i = 0; i < n; i++)
+        {
+            gotoxy(6, 5 + i);
+            cout << i + 1 << ") " << opciones[i];
+        }
+
+        do
+        {
+            tecla = getch();
+        } while (tecla != TECLA_ARRIBA && tecla != TECLA_ABAJO && tecla != ENTER);
+
+        switch (tecla)
+        {
+        case TECLA_ARRIBA:
+            gotoxy(2, 4 + opcionSeleccionada);
+            cout << "   ";
+            opcionSeleccionada--;
+
+            if (opcionSeleccionada < 1)
+            {
+                opcionSeleccionada = n;
+            }
+
+            break;
+        case TECLA_ABAJO:
+            gotoxy(2, 4 + opcionSeleccionada);
+            cout << "   ";
+            opcionSeleccionada++;
+
+            if (opcionSeleccionada > n)
+            {
+                opcionSeleccionada = 1;
+            }
+
+            break;
+        case ENTER:
+            gotoxy(2, 4 + opcionSeleccionada);
+            cout << "   ";
+            repite = false;
+            break;
+
+        default:
+            break;
+        }
+
+    } while (repite);
+
+    return opcionSeleccionada;
 }
 
 void mostrarColas(string titulo, string describcion)
