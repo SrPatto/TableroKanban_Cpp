@@ -12,8 +12,11 @@ void gotoxy(int, int);
 void tablero();
 int menu(const char *, const char *opciones[], int);
 void menu_principal();
+void crearTarea();
+void eliminarTarea();
+void moverTarea();
 
-void mostrarColas(string, string);
+void mostrarTareas(string, string);
 
 HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
 int k = 0, y = 10, x = 34;
@@ -27,8 +30,8 @@ int main()
 
     tablero();
     SetConsoleTextAttribute(hCon, 7);
-    mostrarColas(titulo1, describcion1);
-    mostrarColas(titulo2, describcion2);
+    mostrarTareas(titulo1, describcion1);
+    mostrarTareas(titulo2, describcion2);
     menu_principal();
 
     system("pause>null");
@@ -136,7 +139,7 @@ void menu_principal()
         case 4:
             system("cls");
             gotoxy(2, 2);
-            cout << "Adios";
+            cout << "Adios" << endl;
             repite = false;
             break;
 
@@ -211,7 +214,7 @@ int menu(const char *titulo, const char *opciones[], int n)
     return opcionSeleccionada;
 }
 
-void mostrarColas(string titulo, string describcion)
+void mostrarTareas(string titulo, string describcion)
 {
     int n_Titulo = 0, n_Describcion = 0;
     int sizeTitulo = titulo.size();
