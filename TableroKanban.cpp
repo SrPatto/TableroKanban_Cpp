@@ -28,11 +28,10 @@ void moverTarea();
 void insertarCola(Nodo *&, Nodo *&, string, string);
 void eliminarCola(Nodo *&, Nodo *&, string &, string &);
 bool cola_vacia(Nodo *);
-
-void mostrarTareas(Nodo *&, Nodo *&, string, string);
+void mostrarCola(Nodo *&);
 
 HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
-int k = 0, y = 10, x = 34;
+int y = 10, x = 34;
 
 int main()
 {
@@ -144,16 +143,30 @@ void menu_principal()
                     cout << " ";
                 }
             }
-            mostrarTareas(frente, fin, frente->titulo, frente->describcion);
+            // mostrarCola(frente);
 
             break;
         case 2:
-            gotoxy(2, 16);
-            cout << "hello dad";
+            for (int i = 34; i < 56; i++)
+            {
+                for (int j = 10; j < 20; j++)
+                {
+                    gotoxy(i, j);
+                    cout << " ";
+                }
+            }
+            y = 10;
+            while (frente != NULL)
+            {
+
+                mostrarCola(frente);
+            }
+
+            // eliminarTarea(frente);
             break;
         case 3:
             gotoxy(2, 16);
-            cout << "hello world";
+
             break;
         case 4:
             system("cls");
@@ -233,52 +246,54 @@ int menu(const char *titulo, const char *opciones[], int n)
     return opcionSeleccionada;
 }
 
-void mostrarTareas(Nodo *&frente, Nodo *&fin, string titulo, string describcion)
+void mostrarCola(Nodo *&frente)
 {
     int n_Titulo = 0, n_Describcion = 0;
+    string titulo = frente->titulo;
+    string describcion = frente->describcion;
     int sizeTitulo = titulo.size();
     int sizeDescribcion = describcion.size();
 
-    while (frente != NULL)
+    // while (frente != NULL)
     {
-        if (frente != NULL)
+        // Imprime el titulo de la tarea
+        while (y < 20 && n_Titulo < sizeTitulo)
         {
-            // Imprime el titulo de la tarea
-            while (y < 20 && n_Titulo < sizeTitulo)
+            while (x < 56 && n_Titulo < sizeTitulo)
             {
-                while (x < 56 && n_Titulo < sizeTitulo)
-                {
-                    gotoxy(x, y);
-                    cout << titulo[n_Titulo];
-                    n_Titulo++;
-                    x++;
-                }
-                x = 34;
-                y++;
+                gotoxy(x, y);
+                cout << titulo[n_Titulo];
+                n_Titulo++;
+                x++;
             }
-            // Imprime la describcion de la tarea
-            while (y < 22 && n_Describcion < sizeDescribcion)
-            {
-                while (x < 56 && n_Describcion < sizeDescribcion)
-                {
-                    gotoxy(x, y);
-                    cout << describcion[n_Describcion];
-                    n_Describcion++;
-                    x++;
-                }
-                x = 34;
-                y++;
-            }
-            // Divide tareas
-            for (int i = 34; i < 56; i++)
-            {
-                gotoxy(i, y);
-                printf("%c", 196);
-            }
+            x = 34;
             y++;
         }
-        eliminarCola(frente, fin, frente->titulo, frente->describcion);
+        // Imprime la describcion de la tarea
+        while (y < 22 && n_Describcion < sizeDescribcion)
+        {
+            while (x < 56 && n_Describcion < sizeDescribcion)
+            {
+                gotoxy(x, y);
+                cout << describcion[n_Describcion];
+                n_Describcion++;
+                x++;
+            }
+            x = 34;
+            y++;
+        }
+        // Divide tareas
+        for (int i = 34; i < 56; i++)
+        {
+            gotoxy(i, y);
+            printf("%c", 196);
+        }
+        y++;
+
+        frente = frente->siguiente;
     }
+
+    // eliminarCola(frente, fin, frente->titulo, frente->describcion);
 }
 
 void crearTarea(Nodo *&frente, Nodo *&fin)
@@ -332,7 +347,7 @@ void eliminarCola(Nodo *&frente, Nodo *&fin, string &titulo_n, string &describci
     }
     else
     {
-        frente = frente->siguiente;
+        frente = aux->siguiente;
     }
     delete aux;
 }
