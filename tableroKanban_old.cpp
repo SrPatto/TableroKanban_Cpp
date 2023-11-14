@@ -9,25 +9,39 @@
 #define ENTER 13
 using namespace std;
 
+struct Nodo
+{
+    string titulo;
+    string describcion;
+    Nodo *siguiente;
+};
+
 // Prototipos de Funciones
 void gotoxy(int, int);
-void menu_tablero();
 void tablero();
 int menu(const char *, const char *opciones[], int);
 void menu_principal();
+void crearTarea(Nodo *&, Nodo *&);
+void eliminarTarea();
+void moverTarea();
+// Funciones de la colas
+void insertarCola(Nodo *&, Nodo *&, string, string);
+void eliminarCola(Nodo *&, Nodo *&, string &, string &);
+bool cola_vacia(Nodo *);
+void mostrarCola(Nodo *&);
 
-// Variables Globales
 HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
 int y = 10, x = 34;
 
 int main()
 {
-    menu_tablero();
+    tablero();
+    SetConsoleTextAttribute(hCon, 7);
+    menu_principal();
 
     system("pause>null");
     return 0;
 }
-
 // Funciones
 void gotoxy(int x, int y)
 {
@@ -101,13 +115,16 @@ void tablero()
 
 void menu_principal()
 {
+    Nodo *frente = NULL;
+    Nodo *fin = NULL;
+
     bool repite = true;
     int opcion;
 
     // Titulo y las opciones del menu
     const char *tituloMenu = "\tBienvenido";
-    const char *opciones[] = {"Crear nueva tarea", "Modificar tarea", "Avanzar tarea", "Eliminar tarea", "Salir"};
-    int n = 5;
+    const char *opciones[] = {"Crear nueva tarea", "Mover tarea", "Eliminar tarea", "Salir"};
+    int n = 4;
 
     do
     {
@@ -116,7 +133,9 @@ void menu_principal()
         switch (opcion)
         {
         case 1:
-            /*for (int i = 0; i < 32; i++)
+            crearTarea(frente, fin);
+
+            for (int i = 0; i < 32; i++)
             {
                 for (int j = 10; j < 20; j++)
                 {
@@ -124,31 +143,32 @@ void menu_principal()
                     cout << " ";
                 }
             }
-            */
+            // mostrarCola(frente);
 
             break;
         case 2:
-            /*
             for (int i = 34; i < 56; i++)
+            {
+                for (int j = 10; j < 20; j++)
                 {
-                    for (int j = 10; j < 20; j++)
-                    {
-                        gotoxy(i, j);
-                        cout << " ";
-                    }
+                    gotoxy(i, j);
+                    cout << " ";
                 }
-                y = 10;*/
+            }
+            y = 10;
+            while (frente != NULL)
+            {
 
+                mostrarCola(frente);
+            }
+
+            // eliminarTarea(frente);
             break;
         case 3:
             gotoxy(2, 16);
 
             break;
         case 4:
-            gotoxy(2, 16);
-
-            break;
-        case 5:
             system("cls");
             gotoxy(2, 2);
             cout << "Adios" << endl;
@@ -226,9 +246,113 @@ int menu(const char *titulo, const char *opciones[], int n)
     return opcionSeleccionada;
 }
 
-void menu_tablero()
+void mostrarCola(Nodo *&frente)
 {
-    tablero();
-    SetConsoleTextAttribute(hCon, 7);
-    menu_principal();
+    int n_Titulo = 0, n_Describcion = 0;
+    string titulo = frente->titulo;
+    string describcion = frente->describcion;
+    int sizeTitulo = titulo.size();
+    int sizeDescribcion = describcion.size();
+
+    // while (frente != NULL)
+    {
+        // Imprime el titulo de la tarea
+        while (y < 20 && n_Titulo < sizeTitulo)
+        {
+            while (x < 56 && n_Titulo < sizeTitulo)
+            {
+                gotoxy(x, y);
+                cout << titulo[n_Titulo];
+                n_Titulo++;
+                x++;
+            }
+            x = 34;
+            y++;
+        }
+        // Imprime la describcion de la tarea
+        while (y < 22 && n_Describcion < sizeDescribcion)
+        {
+            while (x < 56 && n_Describcion < sizeDescribcion)
+            {
+                gotoxy(x, y);
+                cout << describcion[n_Describcion];
+                n_Describcion++;
+                x++;
+            }
+            x = 34;
+            y++;
+        }
+        // Divide tareas
+        for (int i = 34; i < 56; i++)
+        {
+            gotoxy(i, y);
+            printf("%c", 196);
+        }
+        y++;
+
+        frente = frente->siguiente;
+    }
+
+    // eliminarCola(frente, fin, frente->titulo, frente->describcion);
+}
+
+void crearTarea(Nodo *&frente, Nodo *&fin)
+{
+    string titulo;
+    string describcion;
+
+    gotoxy(3, 11);
+    cout << "Titulo: ";
+    getline(cin, titulo);
+    gotoxy(3, 13);
+    cout << "Describcion: ";
+    gotoxy(4, 14);
+    getline(cin, describcion);
+    gotoxy(3, 16);
+    cout << "Enter para continuar...";
+    getch();
+
+    insertarCola(frente, fin, titulo, describcion);
+}
+
+void insertarCola(Nodo *&frente, Nodo *&fin, string titulo, string describcion)
+{
+    Nodo *nuevo_nodo = new Nodo();
+
+    nuevo_nodo->titulo = titulo;
+    nuevo_nodo->describcion = describcion;
+    nuevo_nodo->siguiente = NULL;
+
+    if (cola_vacia(frente))
+    {
+        frente = nuevo_nodo;
+    }
+    else
+    {
+        fin->siguiente = nuevo_nodo;
+    }
+    fin = nuevo_nodo;
+}
+
+void eliminarCola(Nodo *&frente, Nodo *&fin, string &titulo_n, string &describcion_n)
+{
+    titulo_n = frente->titulo;
+    describcion_n = frente->describcion;
+    Nodo *aux = frente;
+
+    if (frente == fin)
+    {
+        frente = NULL;
+        fin = NULL;
+    }
+    else
+    {
+        frente = aux->siguiente;
+    }
+    delete aux;
+}
+
+bool cola_vacia(Nodo *frente)
+{
+    return (frente == NULL) ? true : false;
 }
