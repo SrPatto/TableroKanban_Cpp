@@ -15,6 +15,8 @@ void menu_tablero();
 void tablero();
 int menu(const char *, const char *opciones[], int);
 void menu_principal();
+void crearTarea();
+void modificarTarea();
 
 // Variables Globales
 HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -116,28 +118,29 @@ void menu_principal()
         switch (opcion)
         {
         case 1:
-            /*for (int i = 0; i < 32; i++)
+            crearTarea();
+            for (int i = 0; i < 32; i++)
             {
-                for (int j = 10; j < 20; j++)
+                for (int j = 10; j < 30; j++)
                 {
                     gotoxy(i, j);
                     cout << " ";
                 }
             }
-            */
 
             break;
         case 2:
-            /*
-            for (int i = 34; i < 56; i++)
+            modificarTarea();
+
+            for (int i = 0; i < 32; i++)
+            {
+                for (int j = 10; j < 30; j++)
                 {
-                    for (int j = 10; j < 20; j++)
-                    {
-                        gotoxy(i, j);
-                        cout << " ";
-                    }
+                    gotoxy(i, j);
+                    cout << " ";
                 }
-                y = 10;*/
+            }
+            y = 10;
 
             break;
         case 3:
@@ -231,4 +234,31 @@ void menu_tablero()
     tablero();
     SetConsoleTextAttribute(hCon, 7);
     menu_principal();
+}
+
+void crearTarea()
+{
+    string tarea;
+
+    gotoxy(3, 14);
+    cout << "Ingrese la tarea: ";
+    gotoxy(3, 16);
+    getline(cin, tarea);
+    gotoxy(3, 20);
+    cout << "Enter para continuar...";
+    getch();
+}
+
+void modificarTarea()
+{
+    string NombreTareaAntiguo, NombreTareaNuevo;
+
+    gotoxy(3, 14);
+    cout << "Nombre de la tarea: ";
+    gotoxy(3, 16);
+    getline(cin, NombreTareaAntiguo);
+    gotoxy(3, 18);
+    cout << "Nuevo nombre: ";
+    gotoxy(3, 20);
+    getline(cin, NombreTareaNuevo);
 }
