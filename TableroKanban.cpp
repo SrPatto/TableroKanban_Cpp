@@ -11,12 +11,16 @@ using namespace std;
 
 // Prototipos de Funciones
 void gotoxy(int, int);
+void limpiarConsola();
+string pedirDato(const char *);
 void menu_tablero();
 void tablero();
 int menu(const char *, const char *opciones[], int);
 void menu_principal();
 void crearTarea();
 void modificarTarea();
+void avanzarTarea();
+void eliminarTarea();
 
 // Variables Globales
 HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -37,6 +41,31 @@ void gotoxy(int x, int y)
     dwPos.X = x;
     dwPos.Y = y;
     SetConsoleCursorPosition(hCon, dwPos);
+}
+
+void limpiarConsola()
+{
+    for (int i = 0; i < 32; i++)
+    {
+        for (int j = 10; j < 30; j++)
+        {
+            gotoxy(i, j);
+            cout << " ";
+        }
+    }
+    y = 10;
+}
+
+string pedirDato(const char *texto)
+{
+    string tarea;
+
+    gotoxy(3, 14);
+    cout << texto;
+    gotoxy(3, 16);
+    getline(cin, tarea);
+
+    return tarea;
 }
 
 void tablero()
@@ -119,36 +148,22 @@ void menu_principal()
         {
         case 1:
             crearTarea();
-            for (int i = 0; i < 32; i++)
-            {
-                for (int j = 10; j < 30; j++)
-                {
-                    gotoxy(i, j);
-                    cout << " ";
-                }
-            }
+            limpiarConsola();
 
             break;
         case 2:
             modificarTarea();
-
-            for (int i = 0; i < 32; i++)
-            {
-                for (int j = 10; j < 30; j++)
-                {
-                    gotoxy(i, j);
-                    cout << " ";
-                }
-            }
-            y = 10;
+            limpiarConsola();
 
             break;
         case 3:
-            gotoxy(2, 16);
+            avanzarTarea();
+            limpiarConsola();
 
             break;
         case 4:
-            gotoxy(2, 16);
+            eliminarTarea();
+            limpiarConsola();
 
             break;
         case 5:
@@ -240,12 +255,11 @@ void crearTarea()
 {
     string tarea;
 
-    gotoxy(3, 14);
-    cout << "Ingrese la tarea: ";
-    gotoxy(3, 16);
-    getline(cin, tarea);
+    const char *texto = "Ingrese la nueva tarea: ";
+    tarea = pedirDato(texto);
+
     gotoxy(3, 20);
-    cout << "Enter para continuar...";
+    cout << "Nueva Tarea Agregada";
     getch();
 }
 
@@ -253,12 +267,38 @@ void modificarTarea()
 {
     string NombreTareaAntiguo, NombreTareaNuevo;
 
-    gotoxy(3, 14);
-    cout << "Nombre de la tarea: ";
-    gotoxy(3, 16);
-    getline(cin, NombreTareaAntiguo);
-    gotoxy(3, 18);
-    cout << "Nuevo nombre: ";
+    const char *texto1 = "Nombre de la tarea: ";
+    const char *texto2 = "Nuevo nombre: ";
+
+    NombreTareaAntiguo = pedirDato(texto1);
+    limpiarConsola();
+    NombreTareaNuevo = pedirDato(texto2);
+
     gotoxy(3, 20);
-    getline(cin, NombreTareaNuevo);
+    cout << "Tarea Modificada";
+    getch();
+}
+
+void avanzarTarea()
+{
+    string tarea;
+
+    const char *texto = "Nombre de la tarea: ";
+    tarea = pedirDato(texto);
+
+    gotoxy(3, 20);
+    cout << "La Tarea Ha Avanzado";
+    getch();
+}
+
+void eliminarTarea()
+{
+    string tarea;
+
+    const char *texto = "Nombre de la tarea: ";
+    tarea = pedirDato(texto);
+
+    gotoxy(3, 20);
+    cout << "Tarea Eliminada";
+    getch();
 }
