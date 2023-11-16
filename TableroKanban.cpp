@@ -9,6 +9,13 @@
 #define ENTER 13
 using namespace std;
 
+struct nodo
+{
+    string tarea;
+    nodo *siguiente;
+    nodo *atras;
+} *primero, *ultimo;
+
 // Prototipos de Funciones
 void gotoxy(int, int);
 void limpiarConsola();
@@ -21,6 +28,9 @@ void crearTarea();
 void modificarTarea();
 void avanzarTarea();
 void eliminarTarea();
+// Funciones de la cola
+void insertarNodo(string);
+void desplegarLista();
 
 // Variables Globales
 HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -48,6 +58,14 @@ void limpiarConsola()
     for (int i = 0; i < 32; i++)
     {
         for (int j = 10; j < 30; j++)
+        {
+            gotoxy(i, j);
+            cout << " ";
+        }
+    }
+    for (int i = 34; i < 56; i++)
+    {
+        for (int j = 10; j < 20; j++)
         {
             gotoxy(i, j);
             cout << " ";
@@ -149,6 +167,7 @@ void menu_principal()
         case 1:
             crearTarea();
             limpiarConsola();
+            desplegarLista();
 
             break;
         case 2:
@@ -258,6 +277,8 @@ void crearTarea()
     const char *texto = "Ingrese la nueva tarea: ";
     tarea = pedirDato(texto);
 
+    insertarNodo(tarea);
+
     gotoxy(3, 20);
     cout << "Nueva Tarea Agregada";
     getch();
@@ -301,4 +322,69 @@ void eliminarTarea()
     gotoxy(3, 20);
     cout << "Tarea Eliminada";
     getch();
+}
+
+// Funciones de la Cola
+void insertarNodo(string nombreTarea)
+{
+    nodo *nuevo = new nodo();
+    nuevo->tarea = nombreTarea;
+
+    if (primero == NULL)
+    {
+        primero = nuevo;
+        ultimo = nuevo;
+        primero->siguiente = primero;
+        primero->atras = ultimo;
+    }
+    else
+    {
+        ultimo->siguiente = nuevo;
+        nuevo->atras = ultimo;
+        nuevo->siguiente = primero;
+        ultimo = nuevo;
+        primero->atras = ultimo;
+    }
+}
+
+void desplegarLista()
+{
+    nodo *actual = new nodo();
+    actual = primero;
+
+    if (primero != NULL)
+    {
+        do
+        {
+            string tarea = actual->tarea;
+            int n_Tarea = 0;
+            int sizeTarea = tarea.size();
+
+            // Imprime el titulo de la tarea
+            while (y < 20 && n_Tarea < sizeTarea)
+            {
+                while (x < 56 && n_Tarea < sizeTarea)
+                {
+                    gotoxy(x, y);
+                    cout << tarea[n_Tarea];
+                    n_Tarea++;
+                    x++;
+                }
+                x = 34;
+                y++;
+            }
+            // Divide tareas
+            for (int i = 34; i < 56; i++)
+            {
+                gotoxy(i, y);
+                printf("%c", 196);
+            }
+            y++;
+            actual = actual->siguiente;
+        } while (actual != primero);
+    }
+    // else{
+    //     gotoxy(3, 14);
+    //     cout << "El tablero esta vacio";
+    // }
 }
