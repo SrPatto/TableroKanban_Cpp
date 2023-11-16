@@ -31,6 +31,8 @@ void eliminarTarea();
 // Funciones de la cola
 void insertarNodo(string);
 void desplegarLista();
+bool buscarNodo(string);
+void modificarNodo(string, string);
 
 // Variables Globales
 HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -173,6 +175,7 @@ void menu_principal()
         case 2:
             modificarTarea();
             limpiarConsola();
+            desplegarLista();
 
             break;
         case 3:
@@ -292,11 +295,14 @@ void modificarTarea()
     const char *texto2 = "Nuevo nombre: ";
 
     NombreTareaAntiguo = pedirDato(texto1);
-    limpiarConsola();
-    NombreTareaNuevo = pedirDato(texto2);
+    if (buscarNodo(NombreTareaAntiguo))
+    {
+        limpiarConsola();
+        desplegarLista();
+        NombreTareaNuevo = pedirDato(texto2);
+        modificarNodo(NombreTareaAntiguo, NombreTareaNuevo);
+    }
 
-    gotoxy(3, 20);
-    cout << "Tarea Modificada";
     getch();
 }
 
@@ -387,4 +393,63 @@ void desplegarLista()
     //     gotoxy(3, 14);
     //     cout << "El tablero esta vacio";
     // }
+}
+
+bool buscarNodo(string nombreTarea)
+{
+    nodo *actual = new nodo();
+    actual = primero;
+    bool encontrado = false;
+    string nodoBuscado = nombreTarea;
+
+    if (primero != NULL)
+    {
+        do
+        {
+            if (actual->tarea == nodoBuscado)
+            {
+                gotoxy(3, 14);
+                cout << "Tarea encontrada: ";
+                gotoxy(3, 16);
+                cout << actual->tarea;
+                encontrado = true;
+                return 1;
+            }
+            actual = actual->siguiente;
+        } while (actual != primero && encontrado != true);
+        if (!encontrado)
+        {
+            gotoxy(3, 14);
+            cout << "Tarea no encontrada";
+        }
+    }
+    else
+    {
+        gotoxy(3, 14);
+        cout << "El tablero esta vacio";
+    }
+    return 0;
+}
+
+void modificarNodo(string NombreTareaAntiguo, string NombreTareaNuevo)
+{
+    nodo *actual = new nodo();
+    actual = primero;
+    bool encontrado = false;
+    string nodoBuscado = NombreTareaAntiguo;
+
+    if (primero != NULL)
+    {
+        do
+        {
+            if (actual->tarea == nodoBuscado)
+            {
+                actual->tarea = NombreTareaNuevo;
+                encontrado = true;
+                gotoxy(3, 20);
+                cout << "Tarea Modificada";
+            }
+            actual = actual->siguiente;
+        } while (actual != primero && encontrado != true);
+    }
 }
