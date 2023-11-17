@@ -12,6 +12,7 @@ using namespace std;
 struct nodo
 {
     string tarea;
+    int posTK = 1;
     nodo *siguiente;
     nodo *atras;
 } *primero, *ultimo;
@@ -33,6 +34,8 @@ void insertarNodo(string);
 void desplegarLista();
 bool buscarNodo(string);
 void modificarNodo(string, string);
+void avanzarNodo(string);
+void eliminarNodo(string);
 
 // Variables Globales
 HANDLE hCon = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -73,7 +76,22 @@ void limpiarConsola()
             cout << " ";
         }
     }
-    y = 10;
+    for (int i = 59; i < 81; i++)
+    {
+        for (int j = 10; j < 20; j++)
+        {
+            gotoxy(i, j);
+            cout << " ";
+        }
+    }
+    for (int i = 84; i < 106; i++)
+    {
+        for (int j = 10; j < 20; j++)
+        {
+            gotoxy(i, j);
+            cout << " ";
+        }
+    }
 }
 
 string pedirDato(const char *texto)
@@ -181,11 +199,13 @@ void menu_principal()
         case 3:
             avanzarTarea();
             limpiarConsola();
+            desplegarLista();
 
             break;
         case 4:
             eliminarTarea();
             limpiarConsola();
+            desplegarLista();
 
             break;
         case 5:
@@ -313,8 +333,13 @@ void avanzarTarea()
     const char *texto = "Nombre de la tarea: ";
     tarea = pedirDato(texto);
 
-    gotoxy(3, 20);
-    cout << "La Tarea Ha Avanzado";
+    if (buscarNodo(tarea))
+    {
+        limpiarConsola();
+        desplegarLista();
+        avanzarNodo(tarea);
+    }
+
     getch();
 }
 
@@ -325,8 +350,10 @@ void eliminarTarea()
     const char *texto = "Nombre de la tarea: ";
     tarea = pedirDato(texto);
 
-    gotoxy(3, 20);
-    cout << "Tarea Eliminada";
+    limpiarConsola();
+    eliminarNodo(tarea);
+    desplegarLista();
+
     getch();
 }
 
@@ -358,41 +385,92 @@ void desplegarLista()
     nodo *actual = new nodo();
     actual = primero;
 
+    int y_p = 10, y_ep = 10, y_c = 10;
+
     if (primero != NULL)
     {
+
         do
         {
             string tarea = actual->tarea;
             int n_Tarea = 0;
             int sizeTarea = tarea.size();
 
-            // Imprime el titulo de la tarea
-            while (y < 20 && n_Tarea < sizeTarea)
+            switch (actual->posTK)
             {
-                while (x < 56 && n_Tarea < sizeTarea)
+            case 1:
+                // Imprime el titulo de la tarea
+                while (y_p < 20 && n_Tarea < sizeTarea)
                 {
-                    gotoxy(x, y);
-                    cout << tarea[n_Tarea];
-                    n_Tarea++;
-                    x++;
+                    while (x < 56 && n_Tarea < sizeTarea)
+                    {
+                        gotoxy(x, y_p);
+                        cout << tarea[n_Tarea];
+                        n_Tarea++;
+                        x++;
+                    }
+                    x = 34;
+                    y_p++;
                 }
-                x = 34;
-                y++;
+                // Divide tareas
+                for (int i = 34; i < 56; i++)
+                {
+                    gotoxy(i, y_p);
+                    printf("%c", 196);
+                }
+                y_p++;
+                break;
+            case 2:
+                x = 59;
+                // Imprime el titulo de la tarea
+                while (y_ep < 20 && n_Tarea < sizeTarea)
+                {
+                    while (x < 81 && n_Tarea < sizeTarea)
+                    {
+                        gotoxy(x, y_ep);
+                        cout << tarea[n_Tarea];
+                        n_Tarea++;
+                        x++;
+                    }
+                    x = 59;
+                    y_ep++;
+                }
+                // Divide tareas
+                for (int i = 59; i < 81; i++)
+                {
+                    gotoxy(i, y_ep);
+                    printf("%c", 196);
+                }
+                y_ep++;
+                break;
+            case 3:
+                x = 84;
+                // Imprime el titulo de la tarea
+                while (y_c < 20 && n_Tarea < sizeTarea)
+                {
+                    while (x < 106 && n_Tarea < sizeTarea)
+                    {
+                        gotoxy(x, y_c);
+                        cout << tarea[n_Tarea];
+                        n_Tarea++;
+                        x++;
+                    }
+                    x = 84;
+                    y_c++;
+                }
+                // Divide tareas
+                for (int i = 84; i < 106; i++)
+                {
+                    gotoxy(i, y_c);
+                    printf("%c", 196);
+                }
+                y_c++;
+                break;
             }
-            // Divide tareas
-            for (int i = 34; i < 56; i++)
-            {
-                gotoxy(i, y);
-                printf("%c", 196);
-            }
-            y++;
+
             actual = actual->siguiente;
         } while (actual != primero);
     }
-    // else{
-    //     gotoxy(3, 14);
-    //     cout << "El tablero esta vacio";
-    // }
 }
 
 bool buscarNodo(string nombreTarea)
@@ -451,5 +529,88 @@ void modificarNodo(string NombreTareaAntiguo, string NombreTareaNuevo)
             }
             actual = actual->siguiente;
         } while (actual != primero && encontrado != true);
+    }
+}
+
+void avanzarNodo(string nombreTarea)
+{
+    nodo *actual = new nodo();
+    actual = primero;
+    bool encontrado = false;
+    string nodoBuscado = nombreTarea;
+
+    if (primero != NULL)
+    {
+        do
+        {
+            if (actual->tarea == nodoBuscado)
+            {
+                if (actual->posTK != 3)
+                {
+                    actual->posTK++;
+                    encontrado = true;
+                    gotoxy(3, 14);
+                    cout << "Tarea Avanzada";
+                }
+                else
+                {
+                    gotoxy(3, 14);
+                    cout << "Tarea Completada";
+                }
+            }
+            actual = actual->siguiente;
+        } while (actual != primero && encontrado != true);
+    }
+}
+
+void eliminarNodo(string nombreTarea)
+{
+    nodo *actual = new nodo();
+    actual = primero;
+    nodo *anterior = new nodo();
+    anterior = NULL;
+    bool encontrado = false;
+    string nodoBuscado = nombreTarea;
+
+    if (primero != NULL)
+    {
+        do
+        {
+            if (actual->tarea == nodoBuscado)
+            {
+                if (actual == primero)
+                {
+                    primero = primero->siguiente;
+                    primero->atras = ultimo;
+                    ultimo->siguiente = primero;
+                }
+                else if (actual == ultimo)
+                {
+                    ultimo = anterior;
+                    ultimo->siguiente = primero;
+                    primero->atras = ultimo;
+                }
+                else
+                {
+                    anterior->siguiente = actual->siguiente;
+                    actual->siguiente->atras = anterior;
+                }
+                gotoxy(3, 14);
+                cout << "Tarea Eliminada";
+                encontrado = true;
+            }
+            anterior = actual;
+            actual = actual->siguiente;
+        } while (actual != primero && encontrado != true);
+        if (!encontrado)
+        {
+            gotoxy(3, 14);
+            cout << "Tarea no encontrada";
+        }
+    }
+    else
+    {
+        gotoxy(3, 14);
+        cout << "El tablero esta vacio";
     }
 }
