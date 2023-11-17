@@ -389,7 +389,6 @@ void desplegarLista()
 
     if (primero != NULL)
     {
-
         do
         {
             string tarea = actual->tarea;
@@ -467,7 +466,6 @@ void desplegarLista()
                 y_c++;
                 break;
             }
-
             actual = actual->siguiente;
         } while (actual != primero);
     }
