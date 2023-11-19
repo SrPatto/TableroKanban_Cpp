@@ -9,6 +9,7 @@
 #define ENTER 13
 using namespace std;
 
+// Estructura que representa los nodos de la lista
 struct nodo
 {
     string tarea;
@@ -17,7 +18,7 @@ struct nodo
     nodo *atras;
 } *primero, *ultimo;
 
-// Prototipos de Funciones
+// PROTOTIPOS DE FUNCIONES
 void gotoxy(int, int);
 void limpiarConsola();
 string pedirDato(const char *);
@@ -29,7 +30,7 @@ void crearTarea();
 void modificarTarea();
 void avanzarTarea();
 void eliminarTarea();
-// Funciones de la cola
+// Funciones de la lista
 void insertarNodo(string);
 void desplegarLista();
 bool buscarNodo(string);
@@ -49,7 +50,9 @@ int main()
     return 0;
 }
 
-// Funciones
+// FUNCIONES
+
+// Funcion para seleccionar las coordenadas de la consola
 void gotoxy(int x, int y)
 {
     COORD dwPos;
@@ -57,7 +60,7 @@ void gotoxy(int x, int y)
     dwPos.Y = y;
     SetConsoleCursorPosition(hCon, dwPos);
 }
-
+// Funcion para limpiar la consola y que no se amontonen los caracteres
 void limpiarConsola()
 {
     for (int i = 0; i < 32; i++)
@@ -93,7 +96,7 @@ void limpiarConsola()
         }
     }
 }
-
+// Funciona que recibe el texto de la peticion y regresa el texto ingresado
 string pedirDato(const char *texto)
 {
     string tarea;
@@ -105,7 +108,7 @@ string pedirDato(const char *texto)
 
     return tarea;
 }
-
+// Funcion para que pinte el tablero
 void tablero()
 {
     // lineas horizontales
@@ -167,7 +170,7 @@ void tablero()
     SetConsoleTextAttribute(hCon, 2);
     cout << "\tCOMPLETADO";
 }
-
+// Funcion del menu principal con el switch para las opciones
 void menu_principal()
 {
     bool repite = true;
@@ -221,7 +224,7 @@ void menu_principal()
 
     } while (repite);
 }
-
+// Funcion que permite hacer diferentes menus con la misma estructura, agrega la funcion de seleccionar con el ENTER y devuelve la opcion seleccionada
 int menu(const char *titulo, const char *opciones[], int n)
 {
     int opcionSeleccionada = 1;
@@ -230,6 +233,7 @@ int menu(const char *titulo, const char *opciones[], int n)
 
     do
     {
+        // Imprime la flecha
         gotoxy(2, 4 + opcionSeleccionada);
         cout << "==>";
         // Imprime titulo
@@ -285,14 +289,14 @@ int menu(const char *titulo, const char *opciones[], int n)
 
     return opcionSeleccionada;
 }
-
+// Funcion para juntar las funciones de tablero y menu_principal
 void menu_tablero()
 {
     tablero();
     SetConsoleTextAttribute(hCon, 7);
     menu_principal();
 }
-
+// Opcion 1: pide el nombre de la tarea y la inserta a un nuevo nodo
 void crearTarea()
 {
     string tarea;
@@ -306,7 +310,7 @@ void crearTarea()
     cout << "Nueva Tarea Agregada";
     getch();
 }
-
+// Opcion 2: busca la tarea ingresa y le cambia el nobre si existe
 void modificarTarea()
 {
     string NombreTareaAntiguo, NombreTareaNuevo;
@@ -325,7 +329,7 @@ void modificarTarea()
 
     getch();
 }
-
+// Opcion 3: busca la tarea ingresada y avanza en el tablero si existe
 void avanzarTarea()
 {
     string tarea;
@@ -342,7 +346,7 @@ void avanzarTarea()
 
     getch();
 }
-
+// Opcion 4: busca la tarea ingresada y la elimina si existe
 void eliminarTarea()
 {
     string tarea;
@@ -358,6 +362,8 @@ void eliminarTarea()
 }
 
 // Funciones de la Cola
+
+// Crea un nuevo nodo y se le asigna sus apuntadores
 void insertarNodo(string nombreTarea)
 {
     nodo *nuevo = new nodo();
@@ -379,7 +385,7 @@ void insertarNodo(string nombreTarea)
         primero->atras = ultimo;
     }
 }
-
+// Imprime las tareas de la lista en sus respectivas casillas
 void desplegarLista()
 {
     nodo *actual = new nodo();
@@ -397,6 +403,7 @@ void desplegarLista()
 
             switch (actual->posTK)
             {
+            // Casilla de PENDIENTE
             case 1:
                 // Imprime el titulo de la tarea
                 while (y_p < 20 && n_Tarea < sizeTarea)
@@ -419,6 +426,7 @@ void desplegarLista()
                 }
                 y_p++;
                 break;
+            // Casilla de EN PROCESO
             case 2:
                 x = 59;
                 // Imprime el titulo de la tarea
@@ -442,6 +450,7 @@ void desplegarLista()
                 }
                 y_ep++;
                 break;
+            // Casilla de COMPLETADO
             case 3:
                 x = 84;
                 // Imprime el titulo de la tarea
@@ -470,7 +479,7 @@ void desplegarLista()
         } while (actual != primero);
     }
 }
-
+// Funcion que recibe el nombre de la tarea y regresa si fue encontrado o no
 bool buscarNodo(string nombreTarea)
 {
     nodo *actual = new nodo();
@@ -506,7 +515,7 @@ bool buscarNodo(string nombreTarea)
     }
     return 0;
 }
-
+// Funcion que busca la tarea y si exite le cambia el nombre recibiendo NombreTareaAntiguo y NombreTareaNuevo
 void modificarNodo(string NombreTareaAntiguo, string NombreTareaNuevo)
 {
     nodo *actual = new nodo();
@@ -529,7 +538,7 @@ void modificarNodo(string NombreTareaAntiguo, string NombreTareaNuevo)
         } while (actual != primero && encontrado != true);
     }
 }
-
+// Funcion que busca la tarea ingresada y si existe se aumenta 1 en su atributo posTK que representa en que casilla debera imprimirse
 void avanzarNodo(string nombreTarea)
 {
     nodo *actual = new nodo();
@@ -560,7 +569,7 @@ void avanzarNodo(string nombreTarea)
         } while (actual != primero && encontrado != true);
     }
 }
-
+// Funcion que busca la tarea ingresasa y si existe la elimina y ajusta los apuntadores de los demas nodos
 void eliminarNodo(string nombreTarea)
 {
     nodo *actual = new nodo();
